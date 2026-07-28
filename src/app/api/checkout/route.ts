@@ -2,11 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
-
 const PRICE_IDS: Record<string, string> = {
-  starter: process.env.STRIPE_STARTER_PRICE_ID!,
-  pro: process.env.STRIPE_PRO_PRICE_ID!,
+  starter: process.env.STRIPE_STARTER_PRICE_ID ?? '',
+  pro: process.env.STRIPE_PRO_PRICE_ID ?? '',
 }
 
 export async function GET(request: Request) {
@@ -23,6 +21,8 @@ export async function GET(request: Request) {
   if (!user) {
     redirect('/login')
   }
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
