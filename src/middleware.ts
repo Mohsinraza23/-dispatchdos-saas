@@ -1,39 +1,24 @@
-import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({ request })
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return request.cookies.getAll() },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          response = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
-          )
-        },
-      },
-    }
+export function middleware(request: NextRequest) {
+  // Check for Supabase auth cookie (set by @supabase/ssr on login)
+  const hasAuth = request.cookies.getAll().some(c =>
+    c.name.startsWith('sb-') && c.name.includes('-auth-token')
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const { pathname } = request.nextUrl
 
-  // Protect dashboard — redirect to login if not authenticated
-  if (request.nextUrl.pathname.startsWith('/dashboard') && !user) {
+  // Protect dashboard
+  if (pathname.startsWith('/dashboard') && !hasAuth) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
   // Redirect logged-in users away from login/signup
-  if ((request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup') && user) {
+  if ((pathname === '/login' || pathname === '/signup') && hasAuth) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
-  return response
+  return NextResponse.next()
 }
 
 export const config = {
