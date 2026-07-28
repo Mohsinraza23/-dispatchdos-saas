@@ -2,17 +2,6 @@ import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 
-// Use service role key to bypass RLS
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
-const PLAN_BY_PRICE: Record<string, string> = {
-  [process.env.STRIPE_STARTER_PRICE_ID!]: 'starter',
-  [process.env.STRIPE_PRO_PRICE_ID!]: 'pro',
-}
-
 export async function POST(request: Request) {
   const stripeKey = process.env.STRIPE_SECRET_KEY
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
@@ -21,6 +10,13 @@ export async function POST(request: Request) {
   }
 
   const stripe = new Stripe(stripeKey)
+
+  // Init supabase with service role inside handler (avoids build-time error)
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+
   const body = await request.text()
   const sig = request.headers.get('stripe-signature')!
 
