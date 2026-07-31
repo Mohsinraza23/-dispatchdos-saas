@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "DispatchDOS — AI-Powered Carrier Intelligence",
-  description: "AI-powered FMCSA carrier verification with fraud detection and risk scoring. Verify 5,000+ carriers in minutes.",
+  description: "AI-powered carrier intelligence with fraud detection and risk scoring. Verify 5,000+ US carriers in minutes.",
 };
 
 export default function RootLayout({

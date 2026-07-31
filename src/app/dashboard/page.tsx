@@ -126,7 +126,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
               Start Verifying Carriers
             </h2>
             <p className="text-slate-400 mb-6 max-w-lg">
-              Bulk FMCSA lookup with instant risk scoring. Upload your list and get results in minutes.
+              Bulk carrier verification with AI risk scoring. Upload your list and get results in minutes.
             </p>
             {(limit === Infinity || usedLookups < limit) ? (
               <a
