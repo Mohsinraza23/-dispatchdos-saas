@@ -9,7 +9,7 @@ const plans = [
     features: ['30 lookups / month', '30+ carrier data points', 'Risk score per carrier', 'Excel export'],
     missing: ['Authority alerts', 'PDF reports', 'Canada carriers'],
     cta: 'Get Started Free',
-    href: '/dashboard',
+    href: '/signup',
     popular: false,
   },
   {
