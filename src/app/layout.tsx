@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DispatchDOS — FMCSA Carrier Verification",
-  description: "Bulk verify FMCSA carriers in minutes. Built for freight brokers and dispatch agents.",
+  title: "DispatchDOS — AI-Powered Carrier Intelligence",
+  description: "AI-powered FMCSA carrier verification with fraud detection and risk scoring. Verify 5,000+ carriers in minutes.",
 };
 
 export default function RootLayout({
